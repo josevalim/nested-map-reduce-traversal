@@ -109,7 +109,7 @@ Please send a pull request with a solution to the problem for a given programmin
 
     python/for-in.py
 
-*If your solution requires more than 1 file, then you can include all of them inside a directory. However, please don't include project setup files.*
+*If your solution requires more than 1 file, then you can include all of them inside a directory such as `python/for-in/example.py`. However, please don't include project setup files.*
 
 Multiple entries may be placed for a given programming language, as long as they use different approaches. However, it is important the approaches are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
 
