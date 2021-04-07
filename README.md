@@ -103,7 +103,7 @@ Thanks to @nickjj for the description of the problem and for contributing the Py
 
 ## Contribute
 
-Please send a pull request with a solution to the problem for a given programming language in its directory. For example, the Python solution should be placed at:
+Please send a pull request with a solution to the problem for a given programming language in its directory. For example, the Python solution above is placed at:
 
     python/for-in.py
 
