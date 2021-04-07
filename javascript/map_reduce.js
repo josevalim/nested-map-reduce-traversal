@@ -18,27 +18,26 @@ const sections = [
     }
 ]
 
-let innerPosition = 0
+let innerPosition = 1
 
 let formattedSections = sections.map((section, index) => {
 	
 	if (section.reset_lesson_position) {
-		innerPosition = 0
+		innerPosition = 1
 	}
 
 	return {
 		...section,
+		position: index + 1,
 		lessons: section.lessons.reduce((agg, curr) => {
-			innerPosition += 1
 			return [
 				...agg,
 				{
 					...curr,
-					position: innerPosition
+					position: innerPosition++
 				}
 			]
 		}, []),
-		position: index + 1
 	}
 })
 
