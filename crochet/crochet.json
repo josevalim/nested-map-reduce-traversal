@@ -1,0 +1,17 @@
+{
+  "name": "nested-data-structure-traversal",
+  "target": "cli",
+  "sources": [
+    "0-data.crochet",
+    "1-functional.crochet",
+    "2-imperative.crochet",
+    "main.crochet"
+  ],
+  "dependencies": [
+    "crochet.core", "crochet.debug"
+  ],
+  "capabilities": {
+    "requires": [],
+    "provides": []
+  }
+}

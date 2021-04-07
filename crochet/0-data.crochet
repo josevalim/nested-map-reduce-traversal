@@ -1,0 +1,65 @@
+% crochet
+
+// -- The stage --
+//
+// First we define what our data looks like
+define data =
+  [
+    [
+      title -> "Getting started",
+      reset-lesson-position -> false,
+      lessons -> [
+        [name -> "Welcome"],
+        [name -> "Installation"],
+      ]
+    ],
+    [
+      title -> "Basic operator",
+      reset-lesson-position -> false,
+      lessons -> [
+        [name -> "Addition / Subtraction"],
+        [name -> "Multiplication / Division"],
+      ]
+    ],
+    [
+      title -> "Advanced topics",
+      reset-lesson-position -> true,
+      lessons -> [
+        [name -> "Mutability"],
+        [name -> "Immutability"],
+      ]
+    ],
+  ];
+
+// And what we expect our data to look like at the end.
+// This will help us do some testing later.
+define expected =
+  [
+    [
+      title -> "Getting started",
+      reset-lesson-position -> false,
+      position -> 1,
+      lessons -> [
+        [name -> "Welcome", position -> 1],
+        [name -> "Installation", position -> 2],
+      ]
+    ],
+    [
+      title -> "Basic operator",
+      reset-lesson-position -> false,
+      position -> 2,
+      lessons -> [
+        [name -> "Addition / Subtraction", position -> 3],
+        [name -> "Multiplication / Division", position -> 4],
+      ]
+    ],
+    [
+      title -> "Advanced topics",
+      reset-lesson-position -> true,
+      position -> 3,
+      lessons -> [
+        [name -> "Mutability", position -> 1],
+        [name -> "Immutability", position -> 2],
+      ]
+    ],
+  ];
