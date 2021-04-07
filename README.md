@@ -109,6 +109,8 @@ Please send a pull request with a solution to the problem for a given programmin
 
     python/for-in.py
 
+*If your solution requires more than 1 file that's ok but please don't include project setup files.*
+
 Multiple entries may be placed for a given programming language, as long as they use different approaches. However, it is important the approaches are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
 
 All code in this repository should be placed in the public domain. Thank you for sharing a solution!
