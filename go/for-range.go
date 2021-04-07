@@ -6,16 +6,18 @@ import (
 	"fmt"
 )
 
-type lesson struct {
-	Name     string `json:"name"`
-	Position int    `json:"position"`
-}
-type section struct {
-	Title               string   `json:"title"`
-	Position            int      `json:"position"`
-	ResetLessonPosition bool     `json:"reset_lesson_position"`
-	Lessons             []lesson `json:"lessons"`
-}
+type (
+	lesson struct {
+		Name     string `json:"name"`
+		Position int    `json:"position"`
+	}
+	section struct {
+		Title               string   `json:"title"`
+		Position            int      `json:"position"`
+		ResetLessonPosition bool     `json:"reset_lesson_position"`
+		Lessons             []lesson `json:"lessons"`
+	}
+)
 
 func main() {
 	sections := []section{
@@ -50,16 +52,16 @@ func main() {
 	sectionCounter := 1
 	lessonCounter := 1
 
-	for i := range sections {
-		if sections[i].ResetLessonPosition {
+	for idx, section := range sections {
+		if section.ResetLessonPosition {
 			lessonCounter = 1
 		}
 
-		sections[i].Position = sectionCounter
+		sections[idx].Position = sectionCounter
 		sectionCounter++
 
-		for j := range sections[i].Lessons {
-			sections[i].Lessons[j].Position = lessonCounter
+		for j := range section.Lessons {
+			section.Lessons[j].Position = lessonCounter
 			lessonCounter++
 		}
 	}
@@ -68,8 +70,10 @@ func main() {
 	encoder := json.NewEncoder(buffer)
 	encoder.SetIndent("", "  ")
 
-	encoder.Encode(sections)
+	err := encoder.Encode(sections)
+	if err != nil {
+		panic("cannot encode json")
+	}
 
 	fmt.Println(buffer.String())
-
 }
