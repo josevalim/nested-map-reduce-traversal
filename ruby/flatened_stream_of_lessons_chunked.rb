@@ -61,6 +61,7 @@ output = positioned_lesson_stream.group_by{|l| l[:section] }.map{|k, v| k.merge(
 
 puts JSON.pretty_generate(output)
 
+# double check result
 test = [
   {
     "title": "Getting started",
