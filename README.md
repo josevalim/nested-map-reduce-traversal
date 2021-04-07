@@ -105,7 +105,7 @@ Thanks to @nickjj for the description of the problem and for contributing the Py
 
 Please send a pull request with a solution to the problem for a given programming language in its directory. For example, the Python solution should be placed at:
 
-    python/comprehension.py
+    python/for-in.py
 
 Multiple entries may be placed for a given programming language, as long as they use different approaches. However, it is important the approaches are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
 
