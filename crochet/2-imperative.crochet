@@ -1,0 +1,62 @@
+% crochet
+
+relation Context* section-counter: Int;
+relation Context* lesson-counter: Int;
+
+local type imperative-context;
+
+command imperative-context next-section do
+  match
+    when self section-counter: N do
+      fact self section-counter: (N + 1);
+      N;
+    end
+  end
+  | first;
+end
+
+command imperative-context next-lesson do
+  match
+    when self lesson-counter: N do
+      fact self lesson-counter: (N + 1);
+      N;
+    end
+  end
+  | first;
+end
+
+command imperative-context reset-lesson: true do
+  fact self lesson-counter: 1;
+end
+
+command imperative-context reset-lesson: false do end
+
+command resolve-imperative: Data do
+  let Context = new imperative-context;
+  fact Context section-counter: 1;
+  fact Context lesson-counter: 1;
+
+  let Result =
+    for Section in Data do
+      Context reset-lesson: Section.reset-lesson-position;
+      let Lessons =
+        for Lesson in Section.lessons do
+          [ name -> Lesson.name, position -> Context next-lesson ];
+        end;
+      [
+        title -> Section.title,
+        position -> Context next-section,
+        reset-lesson-position -> Section.reset-lesson-position,
+        lessons -> Lessons,
+      ];
+    end;
+
+  // No patterns allowed in forget statements yet
+  for N in (search Context section-counter: N) do forget Context section-counter: N end;
+  for N in (search Context lesson-counter: N) do forget Context lesson-counter: N end;
+
+  Result;
+test
+  assert (resolve-imperative: data) =:= expected;
+end
+

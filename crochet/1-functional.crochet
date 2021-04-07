@@ -1,0 +1,132 @@
+% crochet
+
+
+open crochet.core;
+open crochet.debug;
+
+// -- The model --
+// We model the semantics of counting explicitly. Lessons and sections may have:
+abstract counter;
+// A fixed, properly computed position.
+type fixed is counter(position is integer);
+// A position that's carried over from a previous node.
+singleton carry is counter;
+// A fresh starting position.
+singleton fresh is counter;
+
+// We'll assume that here we only care about `fixed` returning its
+// resolved position.
+command fixed resolved-position = self.position;
+
+// Further, we need to define types for the section and lesson. Both because
+// we keep more information around, and because that's the only thing Crochet's
+// dispatch can work with :')
+type section(title is text, reset is boolean, position is counter, lesson-counter is counter, lessons is tuple);
+type lesson(name is text, position is counter);
+
+// -- Counting --
+// Our counter has one operation, which yields its resolved counter and the
+// next position.
+command fixed apply: integer =
+  [counter -> self, next -> self.position successor];
+command carry apply: (Counter is integer) =
+  [counter -> new fixed(Counter), next -> Counter successor];
+command fresh apply: integer =
+  [counter -> new fixed(1), next -> 2];
+
+// -- Translating --
+// We move away from booleans into the counter realm.
+command #counter with-reset: true = fresh;
+command #counter with-reset: false = carry;
+
+// And from arbitrary records into a typed representation.
+command #section from: Data do
+  let Lesson-counter = #counter with-reset: Data.reset-lesson-position;
+  new section(
+    Data.title,
+    Data.reset-lesson-position,
+    carry,
+    Lesson-counter,
+    #lesson from: Data.lessons
+  );
+end
+
+command #section from: (Data is tuple) =
+  for X in Data do #section from: X end;
+
+command #lesson from: Data =
+  new lesson(Data.name, carry);
+
+command #lesson from: (Data is tuple) =
+  for X in Data do #lesson from: X end;
+
+// -- Finally, resolution --
+// With all the stage set, what's left is to traverse the tree and
+// apply the counting semantics at each point. Because each object
+// behaves differently here, we rely on dispatch to define a polymorphic
+// traversal.
+type resolve-context(section is integer, lesson is integer);
+
+command section resolve: (Ctx0 is resolve-context) do
+  let L-ctx = self.lesson-counter apply: Ctx0.lesson;
+  let S-ctx = self.position apply: Ctx0.section;
+  let Ctx1 = new resolve-context(S-ctx.next, L-ctx.counter resolved-position);
+  let Res = self.lessons resolve: Ctx1;
+  [
+    result -> [new section(self.title, self.reset, S-ctx.counter, L-ctx.counter, Res.result)],
+    ctx -> Res.ctx
+  ];
+end
+
+command lesson resolve: (Ctx0 is resolve-context) do
+  let L-ctx = self.position apply: Ctx0.lesson;
+  let Ctx1 = new resolve-context(Ctx0.section, L-ctx.next);
+  [
+    result -> [new lesson(self.name, L-ctx.counter)],
+    ctx -> Ctx1
+  ];
+end
+
+command tuple resolve: (Ctx0 is resolve-context) do
+  condition // unfortunately, Crochet does not have pattern matching yet
+    when self is-empty =>
+      [result -> [], ctx -> Ctx0];
+
+    always do
+      let Res1 = self first resolve: Ctx0;
+      let Res2 = self but-first resolve: Res1.ctx;
+      [
+        result -> Res1.result ++ Res2.result,
+        ctx -> Res2.ctx
+      ];
+    end
+  end
+end
+
+// -- And we're back --
+// We also need to materialise this representation into "JSON"
+command section to-json =
+  [
+    title -> self.title,
+    reset-lesson-position -> self.reset,
+    position -> self.position resolved-position,
+    lessons -> self.lessons to-json,
+  ];
+
+command lesson to-json =
+  [
+    name -> self.name,
+    position -> self.position resolved-position
+  ];
+
+command tuple to-json =
+  for X in self do X to-json end;
+
+
+// -- Putting it all together --
+command resolve-context resolve: Data do
+  let Res = (#section from: Data) resolve: self;
+  Res.result to-json
+test
+  assert (new resolve-context(1, 1) resolve: data) =:= expected;
+end
