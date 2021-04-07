@@ -1,4 +1,4 @@
-import list_extra
+import list
 
 pub type Lesson {
   Lesson(name: String)
@@ -26,7 +26,7 @@ type Positions {
 }
 
 pub fn main(input: List(Subject)) -> List(PositionedSubject) {
-  list_extra.map_reduce(over: input, from: Positions(1, 1), with: reduce).0
+  list.map_reduce(over: input, from: Positions(1, 1), with: reduce).0
 }
 
 fn reduce(subject: Subject, positions: Positions) {
@@ -36,7 +36,7 @@ fn reduce(subject: Subject, positions: Positions) {
   }
 
   let tuple(lessons, lesson_position) =
-    list_extra.map_reduce(
+    list.map_reduce(
       over: subject.lessons,
       from: lesson_position,
       with: fn(lesson: Lesson, position) {
