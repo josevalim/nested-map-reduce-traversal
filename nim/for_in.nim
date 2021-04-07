@@ -36,11 +36,11 @@ for section in sections:
   if section["reset_lesson_position"].getBool:
     lessonCounter = 1
 
-  section["position"] = sectionCounter.newJInt
-  sectionCounter.inc()
+  section["position"] = %sectionCounter
+  inc sectionCounter
 
-  for lesson in section["lessons"].getElems:
-    lesson["position"] = lessonCounter.newJInt
-    lessonCounter.inc()
+  for lesson in section["lessons"]:
+    lesson["position"] = %lessonCounter
+    inc lessonCounter
 
 echo sections
