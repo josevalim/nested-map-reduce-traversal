@@ -1,28 +1,28 @@
 sections = [
-  {
-    "title": "Getting started",
-    "reset_lesson_position": False,
-    "lessons": [
-      {"name": "Welcome"},
-      {"name": "Installation"}
-    ]
-  },
-  {
-    "title": "Basic operator",
-    "reset_lesson_position": False,
-    "lessons": [
-      {"name": "Addition / Subtraction"},
-      {"name": "Multiplication / Division"}
-    ]
-  },
-  {
-    "title": "Advanced topics",
-    "reset_lesson_position": True,
-    "lessons": [
-      {"name": "Mutability"},
-      {"name": "Immutability"}
-    ]
-  }
+    {
+        "title": "Getting started",
+        "reset_lesson_position": False,
+        "lessons": [
+            {"name": "Welcome"},
+            {"name": "Installation"},
+        ],
+    },
+    {
+        "title": "Basic operator",
+        "reset_lesson_position": False,
+        "lessons": [
+            {"name": "Addition / Subtraction"},
+            {"name": "Multiplication / Division"},
+        ],
+    },
+    {
+        "title": "Advanced topics",
+        "reset_lesson_position": True,
+        "lessons": [
+            {"name": "Mutability"},
+            {"name": "Immutability"},
+        ],
+    },
 ]
 
 section_counter = 1
