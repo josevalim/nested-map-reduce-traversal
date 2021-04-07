@@ -58,6 +58,7 @@ The output should be (formatted in JSON for convenience):
   {
     "title": "Basic operator",
     "reset_lesson_position": false,
+    "position": 2,
     "lessons": [
       {"name": "Addition / Subtraction", "position": 3},
       {"name": "Multiplication / Division", "position": 4}
@@ -67,6 +68,7 @@ The output should be (formatted in JSON for convenience):
   {
     "title": "Advanced topics",
     "reset_lesson_position": true,
+    "position": 3,
     "lessons": [
       {"name": "Mutability", "position": 1},
       {"name": "Immutability", "position": 2}
