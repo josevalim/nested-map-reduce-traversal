@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+
+use v5.28;
+use warnings;
+use Mojo::JSON qw(decode_json encode_json);
+
+# Read the JSON data from the bottom of this file.
+my $json = do { local $/ = readline DATA };
+
+my $sections = decode_json($json);
+
+my $section_counter = 1;
+my $lesson_counter = 1;
+
+for my $section ($sections->@*) {
+    $lesson_counter = 1 if $section->{reset_lesson_position};
+    $section->{position} = $section_counter++;
+    $_->{position} = $lesson_counter++ for $section->{lessons}->@*;
+}
+
+say encode_json($sections);
+
+
+__END__
+[
+  {
+    "title": "Getting started",
+    "reset_lesson_position": false,
+    "lessons": [
+      {"name": "Welcome"},
+      {"name": "Installation"}
+    ]
+  },
+
+  {
+    "title": "Basic operator",
+    "reset_lesson_position": false,
+    "lessons": [
+      {"name": "Addition / Subtraction"},
+      {"name": "Multiplication / Division"}
+    ]
+  },
+
+  {
+    "title": "Advanced topics",
+    "reset_lesson_position": true,
+    "lessons": [
+      {"name": "Mutability"},
+      {"name": "Immutability"}
+    ]
+  }
+]
