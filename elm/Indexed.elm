@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Indexed exposing (main)
 
 import Html exposing (Html)
 import List.Extra
