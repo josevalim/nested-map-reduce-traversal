@@ -30,6 +30,21 @@ sections = [
   }
 ]
 
+output = sections.each_with_index.chunk_while {|(i, _idxi), (j, idxj)| !j[:reset_lesson_position] }.flat_map do |chunk|
+  chunk_lesson_idx = 0
+  chunk.map do |section, section_idx|
+    section.merge(
+      position: section_idx + 1,
+      lessons: section[:lessons].each_with_index.map do |lesson, lesson_idx|
+        lesson.merge(position: chunk_lesson_idx += 1)
+      end
+    )
+  end
+end
+
+puts JSON.pretty_generate(output)
+
+# double check result
 test = [
   {
     "title": "Getting started",
@@ -60,20 +75,6 @@ test = [
   }
 ]
 
-output = sections.each_with_index.chunk_while {|(i, _idxi), (j, idxj)| !j[:reset_lesson_position] }.flat_map do |chunk|
-  chunk_lesson_idx = 0
-  chunk.map do |section, section_idx|
-    section.merge(
-      position: section_idx + 1,
-      lessons: section[:lessons].each_with_index.map do |lesson, lesson_idx|
-        lesson.merge(position: chunk_lesson_idx += 1)
-      end
-    )
-  end
-end
-
 if output != test
   raise "output not equal expected"
 end
-
-puts JSON.pretty_generate(output)
