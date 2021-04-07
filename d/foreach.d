@@ -36,7 +36,7 @@ auto insertPositions(string jsonStr)
 	auto sectionCount = 1;
 	auto lessonCount = 1;
 
-	auto json = JSON.parseJSON;
+	auto json = jsonStr.parseJSON;
 	foreach(section; json.array)
 	{
 		if (section["reset_lesson_position"].boolean) 
