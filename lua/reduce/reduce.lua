@@ -42,6 +42,6 @@ for index,section in ipairs(sections) do
   end
 end
 
-local json = require('reduce.json')
+local json = require('json')
 
 print(json.encode(sections))
