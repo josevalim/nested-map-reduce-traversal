@@ -7,7 +7,6 @@ sections = [
       %{"name" => "Installation"}
     ]
   },
-
   %{
     "title" => "Basic operator",
     "reset_lesson_position" => false,
@@ -16,7 +15,6 @@ sections = [
       %{"name" => "Multiplication / Division"}
     ]
   },
-
   %{
     "title" => "Advanced topics",
     "reset_lesson_position" => true,
@@ -29,8 +27,7 @@ sections = [
 
 {sections, _acc} =
   Enum.map_reduce(sections, {1, 1}, fn section, {section_counter, lesson_counter} ->
-    lesson_counter =
-      if section["reset_lesson_position"], do: 1, else: lesson_counter
+    lesson_counter = if section["reset_lesson_position"], do: 1, else: lesson_counter
 
     {lessons, lesson_counter} =
       Enum.map_reduce(section["lessons"], lesson_counter, fn lesson, lesson_counter ->

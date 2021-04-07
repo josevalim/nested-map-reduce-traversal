@@ -62,7 +62,7 @@ output_fun = fn input ->
     sections
     |> Enum.with_index()
     |> Enum.map_reduce(1, fn {section, section_index}, lesson_offset ->
-      lessons_map_fun = &(Map.put(elem(&1, 0), "position", lesson_offset + elem(&1, 1)))
+      lessons_map_fun = &Map.put(elem(&1, 0), "position", lesson_offset + elem(&1, 1))
       lessons = Enum.map(Enum.with_index(section["lessons"]), lessons_map_fun)
       section_position = section_index + section_offset
       section = Map.merge(section, %{"lessons" => lessons, "position" => section_position})
@@ -75,5 +75,5 @@ output_fun = fn input ->
 end
 
 output = output_fun.(input)
-true = (output == test)
+true = output == test
 IO.inspect(output, limit: :infinity)
