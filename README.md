@@ -79,7 +79,7 @@ The output should be (formatted in JSON for convenience):
 
 ## Sample solution
 
-Here is how the solution would look like in Python:
+Here is one way to solve it in Python:
 
 ```python
 sections = ... # the data from above as Python data structure ellided for convenience
@@ -101,7 +101,7 @@ for section in sections:
 print(sections)
 ```
 
-Thanks to @nickjj for the description of the problem and for contributing the Python solution.
+Thanks to @nickjj for the description of the problem and for contributing this Python solution.
 
 ## Contribute
 
