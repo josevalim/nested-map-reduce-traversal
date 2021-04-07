@@ -29,13 +29,13 @@ sections = [
 ]
 
 
-def calculate_lessons(lessons, lession_position, lesson_counter):
-    if len(lessons) == lession_position:
+def calculate_lessons(lessons, lesson_position, lesson_counter):
+    if len(lessons) == lesson_position:
         return lesson_counter
 
-    lessons[lession_position]["position"] = lesson_counter
+    lessons[lesson_position]["position"] = lesson_counter
 
-    return calculate_lessons(lessons, lession_position + 1, lesson_counter + 1)
+    return calculate_lessons(lessons, lesson_position + 1, lesson_counter + 1)
 
 
 def calculate(sections, section_counter, lesson_counter):
