@@ -105,13 +105,13 @@ Thanks to @nickjj for the description of the problem and for contributing this P
 
 ## Contribute
 
-Please send a pull request with a solution to the problem for a given programming language in its directory. For example, the Python solution above is placed at:
+Please send a pull request with a solution to the problem for a given programming language in its directory. The solution should be a single file named after the approach taken. For example, the Python solution above is placed at:
 
     python/for-in.py
 
 Multiple entries may be placed for a given programming language, as long as they use different approaches. However, it is important the approaches are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
 
-All code in this repository should be placed in the public domain.
+All code in this repository should be placed in the public domain. Thank you for sharing a solution!
 
 ## License
 
