@@ -9,7 +9,7 @@ defmodule Sections do
     :ets.insert(@table, {:lessons, 0})
   end
 
-  def next_possition do
+  def next_position do
     :ets.update_counter(@table, :positions, 1, {:positions, 0})
   end
 
@@ -25,7 +25,7 @@ defmodule Sections do
             Map.put(lesson, "position", next_lesson())
           end
 
-        Map.merge(section, %{"position" => next_possition(), "lessons" => new_lessons})
+        Map.merge(section, %{"position" => next_position(), "lessons" => new_lessons})
       end
 
     :ets.delete(@table)
