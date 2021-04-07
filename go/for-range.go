@@ -70,7 +70,7 @@ func main() {
 	encoder := json.NewEncoder(buffer)
 	encoder.SetIndent("", "  ")
 
-	err:=encoder.Encode(sections)
+	err := encoder.Encode(sections)
 	if err != nil {
 		panic("cannot encode json")
 	}
