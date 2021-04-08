@@ -105,15 +105,22 @@ Thanks to @nickjj for the description of the problem and for contributing this P
 
 ## Contribute
 
-Please send a pull request with a solution to the problem for a given programming language in its directory. The solution should be a single file named after the approach taken. For example, the Python solution above is placed at:
+New solutions to the problem are welcome. In order to contribute:
+
+  * Make sure there are no entries for your programming language of choice
+  * If there are existing entries, make sure your proposed solution is considerably distinct
+
+For example, avoid new entries that are small variations of existing solutions. Solutions that use different approaches, such as mutability vs immutability, single-pass vs chunking, etc are all welcome though.
+
+Once your solution is ready, please send a pull request. The solution should inside a directory named after the programming language and be a single file named after the approach taken. For example, the Python solution above is placed at:
 
     python/for-in.py
 
-*If your solution requires more than 1 file, then you can include all of them inside a directory such as `python/for-in/example.py`. However, please don't include project setup files.*
+*If your solution requires more than 1 file, then you can include all of them inside a directory such as `python/for-in/example.py`. However, there is no need to include project setup files.*
 
-Multiple entries may be placed for a given programming language, as long as they use different approaches. However, it is important the approaches are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
+It is important the solutions are considered readable and idiomatic. The goal is to focus on readability rather than performance, code golfing, etc.
 
-All code in this repository should be placed in the public domain. Thank you for sharing a solution!
+All code in this repository should be placed in the public domain. Thank you for the time and for sharing a solution!
 
 ## License
 
