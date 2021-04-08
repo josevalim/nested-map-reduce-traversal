@@ -50,9 +50,9 @@ let input : Chapter.t list =
 let rec process_lessons ?(i = 1) ?(lessons : PositionedLesson.t list = []) =
   function
   | [] -> lessons
-  | lesson :: rest_lessons ->
+  | (lesson : Lesson.t) :: rest_lessons ->
       process_lessons ~i:(i + 1)
-        ~lessons:({ name = (lesson : Lesson.t).name; position = i } :: lessons)
+        ~lessons:({ name = lesson.name; position = i } :: lessons)
         rest_lessons
 
 and process_chapters ?(i = 1) ?(lesson_i = 1)
