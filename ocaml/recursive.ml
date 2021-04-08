@@ -64,8 +64,6 @@ and process_chapters ?(i = 1) ?(lesson_i = 1)
         match (chapter, lessons) with
         | { reset_lesson_position = true }, _ -> 1
         | _, { position = pos } :: _ -> pos
-        (* we need to take care of this case, because we reuse the type, even
-           though the position is never None *)
         | _, [] -> lesson_i
       in
       process_chapters
