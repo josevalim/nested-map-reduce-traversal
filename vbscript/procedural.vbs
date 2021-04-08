@@ -7,13 +7,13 @@ Set sections(0) = CreateObject("Scripting.Dictionary")
 sections(0).Add "title", "Getting started"
 sections(0).Add "reset_lesson_position", False
 
-Dim lesson1(1)
+Dim lessons1(1)
 
-Set lesson1(0) = CreateObject("Scripting.Dictionary")
-lesson1(0).Add "name", "Welcome"
+Set lessons1(0) = CreateObject("Scripting.Dictionary")
+lessons1(0).Add "name", "Welcome"
 
-Set lesson1(1) = CreateObject("Scripting.Dictionary")
-lesson1(1).Add "name", "Installation"
+Set lessons1(1) = CreateObject("Scripting.Dictionary")
+lessons1(1).Add "name", "Installation"
 
 sections(0).Add "lessons", lesson1
 
@@ -22,13 +22,13 @@ Set sections(1) = CreateObject("Scripting.Dictionary")
 sections(1).Add "title", "Basic operator"
 sections(1).Add "reset_lesson_position", False
 
-Dim lesson2(1)
+Dim lessons2(1)
 
-Set lesson2(0) = CreateObject("Scripting.Dictionary")
-lesson2(0).Add "name", "Addition / Subtraction"
+Set lessons2(0) = CreateObject("Scripting.Dictionary")
+lessons2(0).Add "name", "Addition / Subtraction"
 
-Set lesson2(1) = CreateObject("Scripting.Dictionary")
-lesson2(1).Add "name", "Multiplication / Division"
+Set lessons2(1) = CreateObject("Scripting.Dictionary")
+lessons2(1).Add "name", "Multiplication / Division"
 
 sections(1).Add "lessons", lesson2
 
@@ -37,13 +37,13 @@ Set sections(2) = CreateObject("Scripting.Dictionary")
 sections(2).Add "title", "Advanced topics"
 sections(2).Add "reset_lesson_position", True
 
-Dim lesson3(1)
+Dim lessons3(1)
 
-Set lesson3(0) = CreateObject("Scripting.Dictionary")
-lesson3(0).Add "name", "Mutability"
+Set lessons3(0) = CreateObject("Scripting.Dictionary")
+lessons3(0).Add "name", "Mutability"
 
-Set lesson3(1) = CreateObject("Scripting.Dictionary")
-lesson3(1).Add "name", "Immutability"
+Set lessons3(1) = CreateObject("Scripting.Dictionary")
+lessons3(1).Add "name", "Immutability"
 
 sections(2).Add "lessons", lesson3
 
