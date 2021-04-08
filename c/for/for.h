@@ -1,5 +1,5 @@
-#ifndef REDUCE_H
-#define REDUCE_H
+#ifndef FOR_H
+#define FOR_H
 
 #include <stdio.h>
 
