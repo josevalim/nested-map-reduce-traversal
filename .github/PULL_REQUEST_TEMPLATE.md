@@ -1,4 +1,4 @@
-<! --
+<!--
 
 Thanks for showing interest in submitting a solution!
 
