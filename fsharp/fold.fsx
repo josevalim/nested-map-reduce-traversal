@@ -18,7 +18,7 @@ let processInput (input : JsonValue) =
                 section.GetProperty("reset_lesson_position") = JsonValue.Boolean true
 
             let lessons = section.GetProperty("lessons").AsArray()
-            let lessonStartingNum = if resetPosition then 1 else j + 1
+            let lessonStartingNum = if resetPosition then 0 else j
 
             let newLessons =
                 lessons
@@ -26,14 +26,14 @@ let processInput (input : JsonValue) =
                     (fun lessonNum lesson ->
                         lesson
                         |> addToJsonObj "position"
-                            ((lessonStartingNum + lessonNum) |> decimal |> JsonValue.Number))
+                            ((lessonStartingNum + lessonNum + 1) |> decimal |> JsonValue.Number))
 
             let newSection =
                 section
                 |> addToJsonObj "position" (JsonValue.Number <| decimal (i + 1))
                 |> addToJsonObj "lessons" (JsonValue.Array newLessons)
 
-            (i + 1, j + Array.length newLessons, newSection :: state)
+            (i + 1, lessonStartingNum + Array.length newLessons, newSection :: state)
         )
         (0,0,List.empty)
     |> fun (_,_,list) -> List.rev list
