@@ -11,8 +11,8 @@
              :lessons [{:name "Mutability"}
                        {:name "Immutability"}]}])
 
-(def position (atom 0))
+(def lesson-position (atom 0))
 (defn lessons [{:keys [lessons reset_lesson_position]}]
-   (when reset_lesson_position (reset! position 0))
-   (into [] (map #(assoc % :position (swap! position inc))) lessons))
+   (when reset_lesson_position (reset! lesson-position 0))
+   (into [] (map #(assoc % :position (swap! lesson-position inc))) lessons))
 (into [] (map-indexed #(assoc %2 :position (inc %1) :lessons (lessons %2))) data)
