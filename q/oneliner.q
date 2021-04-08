@@ -1,0 +1,8 @@
+/ Same as explained.q, but as a one-liner
+
+/ The JSON:
+d:.j.k "[{\"title\":\"Getting started\",\"reset_lesson_position\":false,\"lessons\":[{\"name\":\"Welcome\",\"position\":1},{\"name\":\"Installation\",\"position\":2},{\"name\":\"Installation2\",\"position\":3}],\"position\":1},{\"title\":\"Basic operator\",\"reset_lesson_position\":false,\"lessons\":[{\"name\":\"Addition / Subtraction\",\"position\":4},{\"name\":\"Multiplication / Division\",\"position\":5},{\"name\":\"Multiplication / Division2\",\"position\":6},{\"name\":\"Multiplication / Division3\",\"position\":7}],\"position\":2},{\"title\":\"Advanced topics\",\"reset_lesson_position\":true,\"lessons\":[{\"name\":\"Mutability\",\"position\":1},{\"name\":\"Immutability\",\"position\":2}],\"position\":3},{\"title\":\"Getting started\",\"reset_lesson_position\":false,\"lessons\":[{\"name\":\"Welcome\",\"position\":3},{\"name\":\"Installation\",\"position\":4},{\"name\":\"Installation2\",\"position\":5}],\"position\":4},{\"title\":\"Basic operator\",\"reset_lesson_position\":true,\"lessons\":[{\"name\":\"Addition / Subtraction\",\"position\":1},{\"name\":\"Multiplication / Division\",\"position\":2},{\"name\":\"Multiplication / Division2\",\"position\":3},{\"name\":\"Multiplication / Division3\",\"position\":4}],\"position\":5},{\"title\":\"Advanced topics\",\"reset_lesson_position\":true,\"lessons\":[{\"name\":\"Mutability\",\"position\":1},{\"name\":\"Immutability\",\"position\":2}],\"position\":6}]";
+
+/ The code:
+update position:1+til count d from d:delete lp from raze {update lessons:{x,'([]position:y)}'[lessons;lp] from update lp:{cel:count each x; rc:1+til sum cel; (0,1_cel-1)_rc}[lessons] from x} each ((0,where (d`reset_lesson_position)=1b)_d)
+
