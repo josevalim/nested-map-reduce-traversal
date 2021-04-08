@@ -101,7 +101,7 @@ for section in sections:
 print(sections)
 ```
 
-Thanks to @nickjj for the description of the problem and for contributing this Python solution.
+Thanks to [@nickjanetakis](https://twitter.com/nickjanetakis) for the description of the problem and for contributing this Python solution.
 
 ## Contribute
 
