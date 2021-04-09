@@ -3,7 +3,7 @@
 -- in Agda using fold. Basically it is identical to its Haskell sibling except
 -- fancy unicode symbols. The `refl` proof at the end is pretty nice though.
 --
--- Coded against agda-2.1.6.3 and agda-stdlib-1.5
+-- Coded against agda-2.6.1.3 and agda-stdlib-1.5
 
 module Fold where
 
@@ -67,7 +67,7 @@ solve i = (reverse ∘ proj₂ ∘ proj₂) (foldl go (1 , 1 , []) i)
     go : ℕ × ℕ × List PosChapter → Chapter → ℕ × ℕ × List PosChapter
     go (nc , nl , acc) (chapter title reset lessons) =
         let n = length lessons
-            nl' = if_then_else_ reset 1 nl
+            nl' = if reset then 1 else nl
             ps = map (_+ nl') (upTo n)
             plessons = zipWith (λ {(lesson name) p → pos_lesson name p}) lessons ps
         in (nc + 1 , nl' + n , pos_chapter title reset nc plessons ∷ acc)
