@@ -5,7 +5,7 @@ import java.util.List;
  * 
  * @author Marcelo Leite
  */
-public class TraversingNestedDataStructures {
+public class For {
 
 	public static void main(String[] args) {
 	
@@ -78,21 +78,21 @@ public class TraversingNestedDataStructures {
 		List<Section> sections = new ArrayList<>();
 		
 		
-		Section section1 = new TraversingNestedDataStructures().new Section();
+		Section section1 = new Section();
 		section1.setTitle("Getting started");
-		section1.getLessons().add(new TraversingNestedDataStructures().new Lesson("Welcome"));
-		section1.getLessons().add(new TraversingNestedDataStructures().new Lesson("Installation"));
+		section1.getLessons().add(new Lesson("Welcome"));
+		section1.getLessons().add(new Lesson("Installation"));
 		
-		Section section2 = new TraversingNestedDataStructures().new Section();
+		Section section2 = new Section();
 		section2.setTitle("Basic operator");
-		section2.getLessons().add(new TraversingNestedDataStructures().new Lesson("Addition / Subtraction"));
-		section2.getLessons().add(new TraversingNestedDataStructures().new Lesson("Multiplication / Division"));
+		section2.getLessons().add(new Lesson("Addition / Subtraction"));
+		section2.getLessons().add(new Lesson("Multiplication / Division"));
 		
-		Section section3 = new TraversingNestedDataStructures().new Section();
+		Section section3 = new Section();
 		section3.setTitle("Advanced topics");
 		section3.setResetLessonPosition(true);
-		section3.getLessons().add(new TraversingNestedDataStructures().new Lesson("Mutability"));
-		section3.getLessons().add(new TraversingNestedDataStructures().new Lesson("Immutability"));
+		section3.getLessons().add(new Lesson("Mutability"));
+		section3.getLessons().add(new Lesson("Immutability"));
 		
 		sections.add(section1);
 		sections.add(section2);
@@ -101,7 +101,7 @@ public class TraversingNestedDataStructures {
 		return sections;
 	}
 	
-	private class Section {
+	private static class Section {
 		private String title;
 		private int position;
 		private boolean resetLessonPosition;
@@ -133,7 +133,7 @@ public class TraversingNestedDataStructures {
 		}
 	}
 	
-	private class Lesson {
+	private static class Lesson {
 		private String name;
 		private int position;
 		
