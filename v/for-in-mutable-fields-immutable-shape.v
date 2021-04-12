@@ -15,33 +15,41 @@ mut:
 }
 
 fn main() {
-	mut sections := [
-		Section{'Getting started', false, 0, [Lesson{'Welcome', 0},
-			Lesson{'Installation', 0},
-		]},
-		Section{'Basic operator', false, 0, [Lesson{'Addition / Subtraction', 0},
-			Lesson{'Multiplication / Division', 0},
-		]},
-		Section{'Advanced topics', true, 0, [Lesson{'Mutability', 0},
-			Lesson{'Immutability', 0},
-		]},
-	]
+	mut sections := read_sections()
 
-	mut section_counter := 1
-	mut lesson_counter := 1
-
+	mut section_counter, mut lesson_counter := 1, 1
 	for mut section in sections {
-		if section.reset_lesson_position {
-			lesson_counter = 1
-		}
-		section.position = section_counter
-		section_counter++
+		section.position = section_counter++
 
+		lesson_counter = reset_if(lesson_counter, section)
 		for mut lesson in section.lessons {
-			lesson.position = lesson_counter
-			lesson_counter++
+			lesson.position = lesson_counter++
 		}
 	}
 
 	println(json.encode_pretty(sections))
+}
+
+fn reset_if(c int, s &Section) int {
+	return if s.reset_lesson_position { 1 } else { c }
+}
+
+fn read_sections() []Section {
+	s := '[{
+		"title": "Getting started",
+		"reset_lesson_position": false,
+		"position":	0,
+		"lessons": [{"name": "Welcome", "position": 0}, {"name": "Installation", "position": 0}]
+	}, {
+		"title": "Basic operator",
+		"reset_lesson_position": false,
+		"position":	0,
+		"lessons": [{"name": "Addition / Subtraction", "position": 0}, {"name": "Multiplication / Division", "position": 0}]
+	}, {
+		"title": "Advanced topics",
+		"reset_lesson_position": true,
+		"position":	0,
+		"lessons": [{"name": "Mutability", "position": 0}, {"name": "Immutability", "position": 0}]
+	}]'
+	return json.decode([]Section, s) or {}
 }
