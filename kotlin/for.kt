@@ -1,5 +1,3 @@
-import java.text.FieldPosition
-
 data class Section(
     val title: String,
     val resetLessonPosition: Boolean,
@@ -36,7 +34,7 @@ fun main() {
     var sectionCounter = 1
     sections.forEach { section ->
         if (section.resetLessonPosition) {
-            lessonCounter = 0
+            lessonCounter = 1
         }
         section.position = sectionCounter
         sectionCounter++
