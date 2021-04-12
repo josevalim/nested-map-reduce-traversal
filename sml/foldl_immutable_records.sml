@@ -4,6 +4,11 @@ type section = { position: int option, title: string, reset_lesson_position: boo
 fun mkSection title reset lessons = { position=NONE, title=title, reset_lesson_position=reset, lessons=lessons }
 fun mkLesson name                 = { position=NONE, name=name }
 
+fun setPosLessons pos lessons {title, reset_lesson_position, ...} =
+    { position=SOME pos, lessons=lessons, title=title, reset_lesson_position=reset_lesson_position }
+fun setPos pos {name, ...} =
+    { position=SOME pos, name=name }
+
 val sections : section list = [
     mkSection "Getting started" false [
         mkLesson "Welcome",
@@ -20,19 +25,19 @@ val sections : section list = [
 ]
 
 fun withPositions (sections : section list) =
-    (rev o #1 o positionSections) sections
+    (#1 o positionSections) sections
 
 and positionSections sections =
     List.foldl positionSection ([], 1, 1) sections
 
-and positionSection ({ title, reset_lesson_position, lessons, ... }, (acc, secPos, lessPos)) =
-    let val (ls, lessPos) = positionLessons (if reset_lesson_position then 1 else lessPos) lessons
-        val section = { position=secPos, title=title, reset_lesson_position=reset_lesson_position, lessons=rev ls } in
-        (section :: acc, secPos + 1, lessPos)
+and positionSection (section as { title, reset_lesson_position, lessons, ... }, (sections, secPos, lessPos)) =
+    let val lessPos = (if reset_lesson_position then 1 else lessPos)
+        val (lessons, lessPos) = positionLessons lessPos lessons in
+        (sections @ [setPosLessons secPos lessons section], secPos + 1, lessPos)
     end
 
 and positionLessons start lessons =
     List.foldl positionLesson ([], start) lessons
 
-and positionLesson ({name : string, ...}, (acc, pos)) =
-    ({ position=SOME pos, name=name } :: acc, pos + 1)
+and positionLesson (lesson, (lessons, lessPos)) =
+    (lessons @ [setPos lessPos lesson], lessPos + 1)
