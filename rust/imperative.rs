@@ -16,7 +16,7 @@ fn apply_positions(input: &mut [Section]) {
     let mut lesson_counter = 1;
     let mut section_counter = 1;
 
-    for section in input.iter_mut() {
+    for section in input {
         if section.reset_lesson_position {
             lesson_counter = 1;
         }
