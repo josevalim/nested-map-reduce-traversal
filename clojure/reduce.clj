@@ -13,12 +13,12 @@
               {:name "Immutability"}]}])
 
 
-(defn problem-reduce
+(defn problem-reducer
   [result {:keys [reset-lesson-position?] :as section}]
-  (let [{:keys [lessons position]} (last result)
+  (let [{:keys [lessons position] :or {position 0}} (last result)
         lesson-pos (if reset-lesson-position?
                      1
-                     (-> lessons (last) (:position) (inc)))]
+                     (-> lessons (last) (:position 0) (inc)))]
     (conj result
           (-> section
               (assoc :position (inc position))
@@ -27,6 +27,5 @@
                                      (assoc lesson :position (+ lesson-pos i)))
                                    %))))))
 
-
-(reduce problem-reduce [] input)
+(reduce problem-reducer [] input)
 ;; => [{:title "Getting started", :reset-lesson-position? false, :lessons ({:name "Welcome", :position 1} {:name "Installation", :position 2}), :position 1} {:title "Basic operator", :reset-lesson-position? false, :lessons ({:name "Addition / Subtraction", :position 3} {:name "Multiplication / Division", :position 4}), :position 2} {:title "Advanced topics", :reset-lesson-position? true, :lessons ({:name "Mutability", :position 1} {:name "Immutability", :position 2}), :position 3}]
