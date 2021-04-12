@@ -59,14 +59,10 @@ int main()
       if (section.reset_lesson_position)
         lesson_counter = 1;
 
-      section.position = section_counter;
-      ++section_counter;
+      section.position = section_counter++;
 
       for (auto& lesson : section.lessons)
-        {
-          lesson.position = lesson_counter;
-          ++lesson_counter;
-        }
+          lesson.position = lesson_counter++;
     }
 
   return 0;
