@@ -1,7 +1,5 @@
 #! /usr/bin/env tclsh
-# This code uses [dict getdef], currently a cutting edge feature.  It has been
-# tested in Tcl 8.7a3 and Jim Tcl 0.80.  See
-# https://core.tcl-lang.org/tips/doc/trunk/tip/342.md
+# Tested with Tcl 8.6 and Jim Tcl 0.80.
 
 set sections {
     {
@@ -34,7 +32,7 @@ set lessonCounter 1
 set sectionCounter 1
 
 puts [lmap section $sections {
-    if {[dict getdef $section reset_lesson_position false]} {
+    if {[dict get $section reset_lesson_position]} {
         set lessonCounter 1
     }
 
