@@ -27,7 +27,7 @@ record Section(String title, boolean resetLessonPosition, List<Lesson> lessons,
     }
 }
 
-class ImmutableRecords {
+class ForEachImmutable {
 
     private static final List<Section> sections = List.of(
             new Section("Getting started", false, List.of(
