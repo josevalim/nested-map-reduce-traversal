@@ -30,15 +30,15 @@ fn main() {
 	mut section_counter := 1
 	mut lesson_counter := 1
 
-	for i, mut section in sections {
+	for mut section in sections {
 		if section.reset_lesson_position {
 			lesson_counter = 1
 		}
-		sections[i].position = section_counter
+		section.position = section_counter
 		section_counter++
 
-		for j, _ in section.lessons {
-			section.lessons[j].position = lesson_counter
+		for mut lesson in section.lessons {
+			lesson.position = lesson_counter
 			lesson_counter++
 		}
 	}
