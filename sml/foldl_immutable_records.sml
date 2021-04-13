@@ -4,9 +4,9 @@ type section = { position: int option, title: string, reset_lesson_position: boo
 fun mkSection title reset lessons = { position=NONE, title=title, reset_lesson_position=reset, lessons=lessons }
 fun mkLesson name                 = { position=NONE, name=name }
 
-fun setPosLessons pos lessons {title, reset_lesson_position, ...} =
+fun setPosLessons pos lessons ({title, reset_lesson_position, ...} : section) =
     { position=SOME pos, lessons=lessons, title=title, reset_lesson_position=reset_lesson_position }
-fun setPos pos {name, ...} =
+fun setPos pos ({name, ...} : lesson) =
     { position=SOME pos, name=name }
 
 val sections : section list = [
