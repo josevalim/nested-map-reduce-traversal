@@ -7,7 +7,7 @@ defmodule Sections do
 
   Inside elixir folder run:
   - elixir agent_with_pattern_matching.exs --run (to run the implementation)
-  - elixir agent_with_pattern_matching.exs --test ((to test the implementation))
+  - elixir agent_with_pattern_matching.exs --test (to test the implementation)
   """
   alias Sections.TopField
   alias Sections.Lessons
