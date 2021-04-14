@@ -119,4 +119,61 @@ module Eval : SYM = struct
   let eval db = Track.run 1 1 db
 end
 
+(* Another implementation. This one is the straightforward one, using ref cells in OCaml *)
+module EvalRef : SYM = struct
+  (* Reference cells *)
+  let pos_i = ref 1
+  let pos_j = ref 1
+
+  (* Same helpers as in the monadic case *)
+  let inc_i () =
+    let i = !pos_i in
+    pos_i := i + 1;
+    i
+
+  let inc_j () =
+    let j = !pos_j in
+    pos_j := j + 1;
+    j
+
+  let reset_j () =
+    pos_j := 1
+
+  type out = JSON.t
+  type 'a repr = unit -> JSON.t (* The representation is function *)
+  type lesson = JSON.t
+  type chapter = JSON.t
+  type db = JSON.t
+
+  let lesson l () =
+    let pos = inc_j () in
+    (JSON.JDict [("name", JString l); ("position", JInt pos)])
+
+  let chapter title reset ls () =
+      if reset then reset_j ();
+      let i = inc_i () in
+      let less_out = List.map (fun f -> f ()) ls in
+
+      JSON.JDict [("title", JString title); ("position", JInt i);
+                  ("reset_lesson_position", JBool reset);
+                  ("lessons", JSON.JList less_out)]
+
+  let db cs () =
+    let data = List.map (fun f -> f ()) cs in
+    JSON.JList data
+
+  let eval db =
+    pos_i := 1;
+    pos_j := 1;
+    db ()
+end
+
+(* Example of use. Instantiate the two variants *)
 module R = Ex1(Eval)
+module R2 = Ex1(EvalRef)
+
+(* Test that there's agreement *)
+let _ =
+  if R.ex1_eval = R2.ex1_eval
+  then print_endline "Ok."
+  else print_endline "Mismatch."
