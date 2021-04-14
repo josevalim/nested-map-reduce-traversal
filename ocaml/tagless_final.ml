@@ -44,43 +44,79 @@ module Ex1(S: SYM) = struct
   let ex1_eval = eval ex1
 end
 
-(* Provide an evaluation interpreter over the structure *)
+(* Provide an evaluation interpreter over the structure. This particular version uses a
+  monad  *)
 module Eval : SYM = struct
+  (* The track module implements a monad over the state of the positions *)
+  module Track = struct
+    (* Monad base type. Given a state of (i,j) compute its action *)
+    type 'a t = RunState of ((int * int) -> ('a * (int * int)))
+
+    (* Standard monad operations *)
+    let return x = RunState (fun (i,j) -> (x, (i, j)))
+    let bind (act: 'a t) (k: 'a -> 'b t) : 'b t = RunState (fun s ->
+      let RunState fact = act in
+      let (iv, is) = fact s in
+      let RunState fk = k iv in
+      fk is)
+
+    (* The special operations for this monad. we can increment i and j,
+     * and we can reset j *)
+    let inc_i = RunState (fun (i,j) -> (i, (i+1,j)))
+    let inc_j = RunState (fun (i,j) -> (j, (i,j+1)))
+    let reset_j = RunState (fun (i,_j) -> ((), (i,1)))
+
+    (* Use let* syntax in the following *)
+    let ( let* ) x f = bind x f
+
+    (* mapM is the monadic version of a map. It threads the monadic operation
+     * through. *)
+    let mapM f xs =
+      let k x r =
+          let* x = f x in
+          let* xs = r in
+          return (x::xs)
+      in List.fold_right k xs (return [])
+
+    (* In practice, we just need mapM for it's effect, hence this helper *)
+    let sequence = mapM (fun x -> x)
+
+    (* Run a monad, small helper *)
+    let run i j x =
+      let RunState f = x in
+      let (r, _) = f (i,j) in
+      r
+
+  end
+
   type out = JSON.t
-  (* The representation here is key. It states we thread the positional arguments around.
-   * A more CPS-like variant are also possible here by manipulating this type *)
-  type 'a repr = int -> int -> (int * int * 'a)
+  type 'a repr = 'a Track.t (* The representation is a monad, i.e., a program *)
   type lesson = JSON.t
   type chapter = JSON.t
   type db = JSON.t
 
-  let lesson l i j = (i, j+1, JSON.JDict [("name", JString l); ("position", JInt j)])
+  (* With the above scaffold in place, the actual code is simple: *)
+  let lesson l : lesson repr =
+    Track.(
+      let* pos = inc_j in
+      return (JSON.JDict [("name", JString l); ("position", JInt pos)])
+    )
 
-  (* Unexported helper for a list of lessons *)
-  let lessons (ls: lesson repr list) i j =
-    let (final_i, final_j, xs) =
-      (List.fold_left
-        (fun (i, j, acc) less -> let (i', j', out) =  less i j in (i', j', out::acc))
-        (i,j, [])
-        ls)
-    in (final_i, final_j, JSON.JList (List.rev xs))
+  let chapter title reset ls =
+    Track.(
+      let* () = if reset then reset_j else return () in
+      let* i = inc_i in
+      let* less_out = sequence ls in
+      return (JSON.JDict [("title", JString title); ("position", JInt i); ("reset_lesson_position", JBool reset); ("lessons", JSON.JList less_out)])
+    )
 
-  (* The following two functions make aggressive use of binding shadowing. It's intended *)
-  let chapter title reset ls i j =
-    let j = if reset then 1 else j in
-    let (i, j, less_out) = lessons ls i j
-    in (i+1, j, JSON.JDict [("title", JString title); ("position", JInt i); ("reset_lesson_position", JBool reset); ("lessons", less_out)])
-       
-  let db (chapters: (chapter repr) list) i j =
-    let rec loop cs i j acc =
-      match cs with
-      | [] -> (i, j, List.rev acc)
-      | c::next ->
-        let (i, j, d) = c i j in loop next i j (d::acc) in
-    let (i, j, xs) = loop chapters i j []
-    in (i, j, JSON.JList xs)
+  let db cs =
+    Track.(
+      let* data = sequence cs in
+      return (JSON.JList data)
+    )
 
-  let eval db =
-    let (_, _, res) = db 1 1 in res
+  let eval db = Track.run 1 1 db
 end
 
+module R = Ex1(Eval)
