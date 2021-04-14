@@ -25,19 +25,19 @@ val sections : section list = [
 ]
 
 fun withPositions (sections : section list) =
-    (#1 o positionSections) sections
+    (rev o #1 o positionSections) sections
 
 and positionSections sections =
     List.foldl positionSection ([], 1, 1) sections
 
-and positionSection (section as { title, reset_lesson_position, lessons, ... }, (sections, secPos, lessPos)) =
+and positionSection (section as { title, reset_lesson_position, lessons, ... }, (revSections, secPos, lessPos)) =
     let val lessPos = (if reset_lesson_position then 1 else lessPos)
-        val (lessons, lessPos) = positionLessons lessPos lessons in
-        (sections @ [setPosLessons secPos lessons section], secPos + 1, lessPos)
+        val (revLessons, lessPos) = positionLessons lessPos lessons in
+        (setPosLessons secPos (rev revLessons) section :: revSections, secPos + 1, lessPos)
     end
 
 and positionLessons start lessons =
     List.foldl positionLesson ([], start) lessons
 
-and positionLesson (lesson, (lessons, lessPos)) =
-    (lessons @ [setPos lessPos lesson], lessPos + 1)
+and positionLesson (lesson, (revLessons, lessPos)) =
+    (setPos lessPos lesson :: revLessons, lessPos + 1)
