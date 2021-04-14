@@ -38,3 +38,6 @@ and positionSection (section as { title, reset_lesson_position, lessons, ... }, 
 
 and positionLesson (lesson, (revLessons, lessPos)) =
     (setPos lessPos lesson :: revLessons, lessPos + 1)
+
+
+val sections' = withPositions sections
