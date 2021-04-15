@@ -24,23 +24,29 @@ module type SYM = sig
   type out = JSON.t
   type 'a repr
   type lesson
-  type chapter
+  type section
   type db
   val lesson : string -> lesson repr
-  val chapter : string -> bool -> (lesson repr) list -> chapter repr
-  val db: (chapter repr) list -> db repr
+  val section : string -> bool -> (lesson repr) list -> section repr
+  val db: (section repr) list -> db repr
 
   val eval : db repr -> out
 end
 
 (* The example, given as abstract data. Note that we define this as a functor,
- * so we don't say how the functions db, chapter, lesson, ... are evaluated
+ * so we don't say how the functions db, section, lesson, ... are evaluated
  *)
 module Ex1(S: SYM) = struct
   open S
-  let ex1 = db [chapter "Getting started" false [lesson "Welcome"; lesson "Installation"];
-                chapter "Basic operator" false [lesson "Addition / Subtraction"; lesson "Multiplication / Division"];
-                chapter "Advanced topics" true [lesson "Mutability"; lesson "Immutability"]]
+  let ex1 = db [section "Getting started" false
+                        [lesson "Welcome";
+                         lesson "Installation"];
+                section "Basic operator" false
+                        [lesson "Addition / Subtraction";
+                         lesson "Multiplication / Division"];
+                section "Advanced topics" true
+                        [lesson "Mutability";
+                         lesson "Immutability"]]
   let ex1_eval = eval ex1
 end
 
@@ -54,7 +60,7 @@ module Eval : SYM = struct
 
     (* Standard monad operations *)
     let return x = RunState (fun (i,j) -> (x, (i, j)))
-    let bind (act: 'a t) (k: 'a -> 'b t) : 'b t = RunState (fun s ->
+    let bind act k = RunState (fun s ->
       let RunState fact = act in
       let (iv, is) = fact s in
       let RunState fk = k iv in
@@ -92,27 +98,30 @@ module Eval : SYM = struct
   type out = JSON.t
   type 'a repr = 'a Track.t (* The representation is a monad, i.e., a program *)
   type lesson = JSON.t
-  type chapter = JSON.t
+  type section = JSON.t
   type db = JSON.t
 
   (* With the above scaffold in place, the actual code is simple: *)
-  let lesson l : lesson repr =
+  let lesson l =
     Track.(
       let* pos = inc_j in
       return (JSON.JDict [("name", JString l); ("position", JInt pos)])
     )
 
-  let chapter title reset ls =
+  let section title reset ls =
     Track.(
       let* () = if reset then reset_j else return () in
       let* i = inc_i in
       let* less_out = sequence ls in
-      return (JSON.JDict [("title", JString title); ("position", JInt i); ("reset_lesson_position", JBool reset); ("lessons", JSON.JList less_out)])
+      return (JSON.JDict [("title", JString title);
+                          ("position", JInt i);
+                          ("reset_lesson_position", JBool reset);
+                          ("lessons", JSON.JList less_out)])
     )
 
-  let db cs =
+  let db ss =
     Track.(
-      let* data = sequence cs in
+      let* data = sequence ss in
       return (JSON.JList data)
     )
 
@@ -142,14 +151,14 @@ module EvalRef : SYM = struct
   type out = JSON.t
   type 'a repr = unit -> JSON.t (* The representation is function *)
   type lesson = JSON.t
-  type chapter = JSON.t
+  type section = JSON.t
   type db = JSON.t
 
   let lesson l () =
     let pos = inc_j () in
     (JSON.JDict [("name", JString l); ("position", JInt pos)])
 
-  let chapter title reset ls () =
+  let section title reset ls () =
       if reset then reset_j ();
       let i = inc_i () in
       let less_out = List.map (fun f -> f ()) ls in
@@ -158,8 +167,8 @@ module EvalRef : SYM = struct
                   ("reset_lesson_position", JBool reset);
                   ("lessons", JSON.JList less_out)]
 
-  let db cs () =
-    let data = List.map (fun f -> f ()) cs in
+  let db ss () =
+    let data = List.map (fun f -> f ()) ss in
     JSON.JList data
 
   let eval db =
