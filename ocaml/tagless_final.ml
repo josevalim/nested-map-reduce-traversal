@@ -56,21 +56,19 @@ module Eval : SYM = struct
   (* The track module implements a monad over the state of the positions *)
   module Track = struct
     (* Monad base type. Given a state of (i,j) compute its action *)
-    type 'a t = RunState of ((int * int) -> ('a * (int * int)))
+    type 'a t = (int * int) -> ('a * (int * int))
 
     (* Standard monad operations *)
-    let return x = RunState (fun (i,j) -> (x, (i, j)))
-    let bind act k = RunState (fun s ->
-      let RunState fact = act in
-      let (iv, is) = fact s in
-      let RunState fk = k iv in
-      fk is)
+    let return x (i,j) = x, (i, j)
+    let bind act k s =
+      let (iv, is) = act s
+      in k iv is
 
     (* The special operations for this monad. we can increment i and j,
      * and we can reset j *)
-    let inc_i = RunState (fun (i,j) -> (i, (i+1,j)))
-    let inc_j = RunState (fun (i,j) -> (j, (i,j+1)))
-    let reset_j = RunState (fun (i,_j) -> ((), (i,1)))
+    let inc_i (i,j) = i, (i+1,j)
+    let inc_j (i,j) = j, (i,j+1)
+    let reset_j (i, _j) = (), (i,1)
 
     (* Use let* syntax in the following *)
     let ( let* ) x f = bind x f
@@ -79,20 +77,18 @@ module Eval : SYM = struct
      * through. *)
     let mapM f xs =
       let k x r =
-          let* x = f x in
+          let* fx = f x in
           let* xs = r in
-          return (x::xs)
+          return (fx::xs)
       in List.fold_right k xs (return [])
 
     (* In practice, we just need mapM for it's effect, hence this helper *)
     let sequence = mapM (fun x -> x)
 
     (* Run a monad, small helper *)
-    let run i j x =
-      let RunState f = x in
+    let run i j f =
       let (r, _) = f (i,j) in
       r
-
   end
 
   type out = JSON.t
