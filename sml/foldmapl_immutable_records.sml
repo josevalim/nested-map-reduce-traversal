@@ -25,19 +25,33 @@ val sections : section list = [
 ]
 
 
+(* Define a fold-map utility function.
+ * `foldMapl` is proposed for the SML Basis Library - see
+ * https://github.com/SMLFamily/BasisLibrary/wiki/2015-003b-List
+ * The definition below is from the section Discussion.
+ *)
+fun foldMapl f init xs =
+  let
+    fun f' (x, (ys, r)) = let val (y, r) = f (x, r) in (y :: ys, r) end
+    val (ys, r) = List.foldl f' ([], init) xs
+  in
+    (List.rev ys, r)
+  end
+
+
 fun withPositions sections =
-    let val (revSections, _, _) = List.foldl positionSection ([], 1, 1) sections
-    in  rev revSections
+    let val (sections', _) = foldMapl positionSection (1, 1) sections
+    in  sections'
     end
 
-and positionSection (section as {title, resetLessonPosition, lessons, ...}, (revSections, secPos, lessPos)) =
+and positionSection (section as {title, resetLessonPosition, lessons, ...}, (secPos, lessPos)) =
     let val lessPos'1 = if resetLessonPosition then 1 else lessPos
-        val (revLessons, lessPos') = List.foldl positionLesson ([], lessPos'1) lessons
-    in  (updateSection secPos (rev revLessons) section :: revSections, secPos + 1, lessPos')
+        val (lessons', lessPos') = foldMapl positionLesson lessPos'1 lessons
+    in  (updateSection secPos lessons' section, (secPos + 1, lessPos'))
     end
 
-and positionLesson (lesson, (revLessons, lessPos)) =
-    (updateLesson lessPos lesson :: revLessons, lessPos + 1)
+and positionLesson (lesson, lessPos) =
+    (updateLesson lessPos lesson, lessPos + 1)
 
 
 val sections' = withPositions sections
