@@ -2,6 +2,8 @@
 
 The goal of this repository is to share solutions to a common problem of traversing and annotating data-structures across a variety of programming languages.
 
+**Note:** This repository has now been archived with many different solutions across multiple languages, thanks to everyone who contributed!
+
 ## The problem
 
 The algorithm should receive a list of sections. A section is a key-value data structure, with a "title", a "reset_lesson_position" boolean, and a list of "lessons". A lesson is a key-value data structure with the "name" field.
