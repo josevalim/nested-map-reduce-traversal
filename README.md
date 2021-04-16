@@ -2,7 +2,7 @@
 
 The goal of this repository is to share solutions to a common problem of traversing and annotating data-structures across a variety of programming languages.
 
-**Note:** This repository has now been archived with many different solutions across multiple languages, thanks to everyone who contributed!
+*Note: This repository has now been archived with many different solutions across multiple languages, thanks to everyone who contributed!*
 
 ## The problem
 
