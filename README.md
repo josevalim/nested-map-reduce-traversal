@@ -6,6 +6,8 @@ The goal of this repository is to share solutions to a common problem of travers
 
 ## The problem
 
+The data format was extracted and simplified from an existing Python application.
+
 The algorithm should receive a list of sections. A section is a key-value data structure, with a "title", a "reset_lesson_position" boolean, and a list of "lessons". A lesson is a key-value data structure with the "name" field.
 
 Your job is to traverse the list of sections, adding a position (starting from 1) to each section, and traverse the list of lessons adding a position (starting from 1) to each lesson. Note, however, the lessons position is shared across sections. The lesson position should also be reset if "reset_lesson_position" is true.
